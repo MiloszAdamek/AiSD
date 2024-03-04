@@ -18,8 +18,7 @@ class Matrix:
                 current_row = self._data[i]
                 for j in range(cols):
                     current_row.append(default_value)
-        
-            
+                
     def __add__(A, B):
 
         if isinstance(A,Matrix) and isinstance(B, Matrix):
@@ -55,7 +54,15 @@ class Matrix:
                             result[i][j] += A[i][k] * B[k][j]
                 return result
             
-            else: print('Numerous of columns in A has to be equal to numerous of columns in B!')
+        if isinstance(A, Matrix) and isinstance(B, float):
+            result = Matrix(rows=A.rows, cols=A.cols)
+            for i in range(A.rows):
+                for j in range(A.cols):
+                    result[i][j] += A[i][j] * B
+
+            return result
+
+        else: print('Numerous of columns in A has to be equal to numerous of columns in B!')
 
     def __getitem__(self, item):
 
@@ -80,6 +87,9 @@ class Matrix:
             matrix_str += ' |\n'
 
         return matrix_str
+    
+    def det_sarrus(self):
+        return (self[0][0] * self[1][1]) - (self[0][1] * self[1][0])
 
 def transpose(A: Matrix):
     result = Matrix(rows=A.cols, cols=A.rows)
@@ -88,19 +98,45 @@ def transpose(A: Matrix):
             result[j][i] = A[i][j]
     return result
 
+def reduce_matrix(A: Matrix):
+    r, c = A.size()
+    data = []
+
+    for i in range(r - 1):
+        new_row = []
+        for j in range(c - 1):
+            m = Matrix([[A[0][0], A[0][j+1]], [A[i+1][0], A[i+1][j+1]]])
+            new_row.append(m.det_sarrus())
+        data.append(new_row)
+    result = Matrix(data)
+    return result
+
+
+def chio_det(A: Matrix, mul=1):
+    
+    if A.rows == A.cols:
+        n = A.rows
+        new_mul = mul * (1 /(A[0][0] ** (n - 2)))
+        if n > 2:
+            A = reduce_matrix(A)
+            return chio_det(A, new_mul)
+        else: 
+            det = mul * A.det_sarrus()
+            return det
+    else: print('Matrix has to be squared!')
+
 def main():
 
-    m1 = Matrix([[1, 0, 2],
-                [-1, 3, 1]])
- 
-    m2 = Matrix(rows=2, cols=3, default_value=1)
+    A = Matrix([[5 , 1 , 1 , 2 , 3],
 
-    m3 = Matrix([[3, 1],
-                [2, 1],
-                [1, 0]]) 
-    
-    print(transpose(m1))
-    print(m1 + m2)
-    print(m1 * m3)
+                [4 , 2 , 1 , 7 , 3],
+
+                [2 , 1 , 2 , 4 , 7],
+
+                [9 , 1 , 0 , 7 , 0],
+
+                [1 , 4 , 7 , 2 , 2] ])
+    det_A = chio_det(A)
+    print(det_A)
 
 main()
