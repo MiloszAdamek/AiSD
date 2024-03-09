@@ -79,10 +79,8 @@ def main():
     uczelnie = LinkedList()
     for i in range(3):
         uczelnie.append(data[i])
-
     for i in range(3, len(data)):
         uczelnie.add(data[i])
-
     print(uczelnie)
     print(f"List lenght: {uczelnie.lenght()}\n")
     uczelnie.remove()
