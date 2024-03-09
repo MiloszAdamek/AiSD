@@ -34,11 +34,15 @@ class LinkedList():
             self.head = secound_elem
 
     def remove_end(self):
-        first_elem = self.head
-        for i in range(self.lenght()):
-            first_elem = first_elem.next
-        first_elem.next = None
-
+        if not self.is_empty():
+            if self.lenght() == 1:
+                self.head = None
+                return
+            last_element = self.head
+            while last_element.next:
+                last_element = last_element.next
+                if last_element.next.next is None:
+                    last_element.next = None
 
     def is_empty(self):
         return self.head == None
@@ -75,13 +79,21 @@ def main():
     uczelnie = LinkedList()
     for i in range(3):
         uczelnie.append(data[i])
+
     for i in range(3, len(data)):
         uczelnie.add(data[i])
+
     print(uczelnie)
     print(f"List lenght: {uczelnie.lenght()}\n")
     uczelnie.remove()
-    print(f"First element: {uczelnie.get()}")
-    # uczelnie.remove_end()
-    # print(uczelnie)
+    print(f"First element: {uczelnie.get()}\n")
+    uczelnie.remove_end()
+    print(uczelnie)
+    uczelnie.destroy()
+    print(uczelnie.is_empty())
+    uczelnie.remove()
+    uczelnie.append(data[0])
+    uczelnie.remove_end()
+    print(uczelnie.is_empty())
 
 main()
