@@ -125,18 +125,35 @@ def chio_det(A: Matrix, mul=1):
             return det
     else: print('Matrix has to be squared!')
 
+def gauss_det(A: Matrix):
+
+    if A.rows == A.cols:
+        if A.rows == 1:
+            return A[0][0]
+        det = 0
+        for j in range(A.rows):
+            minor = Matrix([[A[i][k] for k in range(A.rows) if k != j] for i in range(1, A.rows)])
+            det += ((-1) ** j) * A[0][j] * gauss_det(minor)
+        return det
+
 def main():
 
     A = Matrix([[5 , 1 , 1 , 2 , 3],
-
                 [4 , 2 , 1 , 7 , 3],
-
                 [2 , 1 , 2 , 4 , 7],
-
                 [9 , 1 , 0 , 7 , 0],
-
                 [1 , 4 , 7 , 2 , 2] ])
+    
     det_A = chio_det(A)
     print(det_A)
+
+    B = Matrix([[0 , 1 , 1 , 2 , 3],
+                [4 , 2 , 1 , 7 , 3],
+                [2 , 1 , 2 , 4 , 7],
+                [9 , 1 , 0 , 7 , 0],
+                [1 , 4 , 7 , 2 , 2]])
+    
+    det_B = gauss_det(B)
+    print(det_B)
 
 main()
