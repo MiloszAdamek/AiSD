@@ -11,19 +11,18 @@ class DoubleLinkedList():
         self.head = head #wskazanie na pierwszy element listy
         self.tail = tail
 
-    #TODO:
     def destroy(self):
-        while not self.is_empty():
-            last_element = self.tail
+        while self.length() != 1:
+            new_head = self.head.next
+            self.head = new_head
+        self.head = None
             
-    #TODO:
     def add(self, data): #adding to the head
         new_element = Element(data)
         self.head.prev = new_element #ustawienie prev aktualnego elementu z głowy na nowy element
         new_element.next = self.head #ustawia next nowego elementu na bieżącą głowę listy -> nowy element staje się pierwszym elementem listy
         self.head = new_element #ustawia self.head na nowy element, czyniąc go nową głową listy
         
-
     def append(self, data): #adding to the tail
         new_element = Element(data)
         if self.is_empty(): 
@@ -69,7 +68,7 @@ class DoubleLinkedList():
     def get(self): 
         first_elem = self.head
         return first_elem.data
-
+    
     def __str__(self):
         list_str = ""
         current_element = self.head
@@ -92,16 +91,16 @@ def main():
     for i in range(3, len(data)):
         uczelnie.add(data[i])
     print(uczelnie)
-    print(f"List length: {uczelnie.length()}\n")
+    print(f"{uczelnie.length()}\n")
     uczelnie.remove()
-    print(f"First element: {uczelnie.get()}\n")
+    print(f"{uczelnie.get()}\n")
     uczelnie.remove_end()
     print(uczelnie)
-    # uczelnie.destroy()
-    # print(uczelnie.is_empty())
-    # uczelnie.remove()
-    # uczelnie.append(data[0])
-    # uczelnie.remove_end()
-    # print(uczelnie.is_empty())
+    uczelnie.destroy()
+    print(uczelnie.is_empty())
+    uczelnie.remove()
+    uczelnie.append(data[0])
+    uczelnie.remove_end()
+    print(uczelnie.is_empty())
 
 main()
