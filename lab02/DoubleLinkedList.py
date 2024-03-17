@@ -16,7 +16,6 @@ class DoubleLinkedList():
         while not self.is_empty():
             last_element = self.tail
             
-
     #TODO:
     def add(self, data): #adding to the head
         new_element = Element(data)
@@ -24,47 +23,48 @@ class DoubleLinkedList():
         new_element.next = self.head #ustawia next nowego elementu na bieżącą głowę listy -> nowy element staje się pierwszym elementem listy
         self.head = new_element #ustawia self.head na nowy element, czyniąc go nową głową listy
         
+
     def append(self, data): #adding to the tail
         new_element = Element(data)
         if self.is_empty(): 
             self.head = new_element
             self.tail = new_element
         else:
-            last_element = self.tail
-            self.tail.prev = last_element
-            last_element.next = new_element
+            new_element.prev = self.tail
+            self.tail.next = new_element
             self.tail = new_element
+
             
-    # #TODO:
-    # def remove(self):
-    #     if not self.is_empty():
-    #         first_elem = self.head
-    #         secound_elem = first_elem.next
-    #         self.head = secound_elem
+    def remove(self):
+        if not self.is_empty():
+            first_elem = self.head
+            secound_elem = first_elem.next
+            self.head = secound_elem
+            self.head.prev = None
 
     # #TODO:
-    # def remove_end(self):
-    #     if not self.is_empty():
-    #         if self.lenght() == 1:
-    #             self.head = None
-    #             return
-    #         last_element = self.head
-    #         while last_element.next:
-    #             last_element = last_element.next
-    #             if last_element.next.next is None:
-    #                 last_element.next = None
+    def remove_end(self):
+        if not self.is_empty():
+            if self.length() == 1:
+                self.head = None
+                self.tail = None
+            else:
+                last_element = self.tail
+                self.tail = last_element.prev
+                self.tail.next = None
+                last_element = None
 
     def is_empty(self):
         return self.head == None
 
-    def lenght(self):
-        lenght = 0
+    def length(self):
+        length = 0
         if not self.is_empty():
             element = self.head
             while element:
                 element = element.next
-                lenght += 1
-            return lenght
+                length += 1
+            return length
 
     def get(self): 
         first_elem = self.head
@@ -92,11 +92,11 @@ def main():
     for i in range(3, len(data)):
         uczelnie.add(data[i])
     print(uczelnie)
-    print(f"List lenght: {uczelnie.lenght()}\n")
-    # uczelnie.remove()
-    # print(f"First element: {uczelnie.get()}\n")
-    # uczelnie.remove_end()
-    # print(uczelnie)
+    print(f"List length: {uczelnie.length()}\n")
+    uczelnie.remove()
+    print(f"First element: {uczelnie.get()}\n")
+    uczelnie.remove_end()
+    print(uczelnie)
     # uczelnie.destroy()
     # print(uczelnie.is_empty())
     # uczelnie.remove()
