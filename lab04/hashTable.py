@@ -17,7 +17,7 @@ class hashTable:
             t = (hv + self.c1 * i + self.c2 * i**2) % self.size
             if self.tab[t] != None:
                 self.tab[t] = data
-        if self.tab[t] == None:
+        if self.tab[t] is None:
             print('Brak miejsca')
             return None
             
