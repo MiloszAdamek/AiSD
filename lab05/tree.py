@@ -5,7 +5,7 @@ class Root:
         self.root = root
 
     def print_tree(self):
-        print("==============")
+        print("\n==============")
         self.__print_tree(self.root, 0)
         print("==============")
 
@@ -19,7 +19,6 @@ class Root:
             self.__print_tree(node.left, lvl+5)
 
     def print(self):
-        """ Print sorted values from tree key: value"""
         return self.__print(self.root)
 
     def __print(self, current):
@@ -68,29 +67,48 @@ class Node:
             return self.value
         return temp
 
-
-    def _delete(self, key): #funkcja zwraca wskaznik na poprzedni node, node do usunięcia i dzieci
-        if self.left is None and self.right is None:
-            self = None
-
-        if self.left is None and self.right is not None:
-            pass
-
-        if self.left is not None and self.right is None:
-            pass
-
-        if self.left is not None and self.right is not None:
-            pass
-
     def delete(self, key):
-        
         if self is None:
-            print('Tree is not exist!')
-        return self._delete(key)
+            return None
+
+        if key < self.key:
+            self.left = self.left.delete(key)
+        elif key > self.key:
+            self.right = self.right.delete(key)
+        else:
+            # 0 children
+            if self.left is None and self.right is None:
+                return None
+            # 1 child
+            if self.left is None:
+                return self.right
+            elif self.right is None:
+                return self.left
+
+            # 2 childeren
+            succParent = self
+            succ = self.right
+            while succ.left is not None:
+                succParent = succ
+                succ = succ.left
+
+            self.key = succ.key
+            self.value = succ.value
+
+            if succParent == self:
+                self.right = self.right.delete(succ.key)
+            else:
+                succParent.left = succ.right
+
+        return self
 
     def height(self):
-        pass
-
+        if self is None:
+            return 0
+        else:
+            left_height = self.left.height() if self.left else 0
+            right_height = self.right.height() if self.right else 0
+            return max(left_height, right_height) + 1
 
 def main():
     
