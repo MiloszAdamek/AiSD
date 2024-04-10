@@ -25,14 +25,10 @@ class Element:
 class Queue:
     def __init__(self, n=None):
         self.Tab = []
-        #self.n = None
+        self.n = 0
     
     def is_empty(self):
-        for i in self.Tab:
-            if i == None:
-                continue
-            else: return False
-        return True
+        return self.n == 0
     
     def peek(self):#zwraca element o najwyższym priorytecie -> wierzchołek kopca
         if self.is_empty: return True
@@ -65,9 +61,9 @@ class Queue:
         return len(self.Tab)
 
     def upheap(self, index):
-        key = self.Tab[index]
+        key = (self.Tab[index])
         parent = self.parent(key)
-        while parent > 0 and self.Tab[parent] > key:
+        while key > 0 and self.Tab[parent] > key:
             self.Tab[index] = self.Tab[parent]
             index = parent
             parent /= 2
@@ -76,7 +72,14 @@ class Queue:
     def downheap(self, index):
         left = self.left(index)
         right = self.right(index)
-        pass
+        smallest = index
+        if left < self.n and self.Tab[left] < self.Tab[index]:
+            smallest = left
+        if right < self.n and self.Tab[right] < self.Tab[smallest]:
+            smallest = right
+        if smallest != index:
+            self.Tab[index], self.Tab[smallest] = self.Tab[smallest], self.Tab[index]
+            self.downheap(smallest)
 
     def print_tree(self, idx, lvl):
         if idx<self.size:           
@@ -90,7 +93,17 @@ class Queue:
         print( '}')
 
 def main():
-    pass
+    heap = Queue()
+    priority = [7,5,1,2,5,3,4,8,9]
+    data = "GRYMOTYLA"
+
+    for p in priority:
+        for c in data:
+            heap.enqueue(Element(c,p))
+    
+    heap.print_tab()
+    heap.print_tree()
+
 
 main()
 
