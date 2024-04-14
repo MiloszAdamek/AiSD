@@ -31,7 +31,7 @@ class Queue:
         return self.n == 0
     
     def peek(self):#zwraca element o najwyższym priorytecie -> wierzchołek kopca
-        if self.is_empty: return True
+        if self.is_empty(): return True
         else: return self.Tab[0] 
     
     def left(self, index):#na podstawie indexu węzła zwraca index lewego potomka
@@ -41,39 +41,40 @@ class Queue:
         return 2*index + 2
 
     def parent(self, index): #na podstawie indexu węzła zwraca index jego rodzica
-        return (index - 1)/2
+        return int((index - 1)/2)
 
     def dequeue(self):
         if self.is_empty():
             return None
+        min_elem = self.Tab[0]
         self.Tab[0] = self.Tab[-1]
+        self.Tab.pop()
         self.n -= 1 #rozmiar kopca
         self.downheap(0)
+        return min_elem
 
     def enqueue(self, elem: Element):
-        if self.n == len(self.Tab):
-            self.Tab.append(elem)
-        else: self.Tab[-1] = elem # jeśli rozmiar kopca jest mniejszy niż tablicy - zastąpienie elementu tablicy
-        self.upheap(0)
+        self.Tab.append(elem)
+        self.upheap(self.n)
         self.n += 1 #rozmiar kopca
 
     def size(self):
         return len(self.Tab)
 
     def upheap(self, index):
-        key = (self.Tab[index])
-        parent = self.parent(key)
-        while key > 0 and self.Tab[parent] > key:
-            self.Tab[index] = self.Tab[parent]
-            index = parent
-            parent /= 2
-        self.Tab[index] = key
+        while index > 0:
+            parent_idx = self.parent(index)
+            if self.Tab[parent_idx] > self.Tab[index]:
+                self.Tab[parent_idx], self.Tab[index] = self.Tab[index], self.Tab[parent_idx]
+                index = parent_idx
+            else:
+                break
 
     def downheap(self, index):
+        smallest = index
         left = self.left(index)
         right = self.right(index)
-        smallest = index
-        if left < self.n and self.Tab[left] < self.Tab[index]:
+        if left < self.n and self.Tab[left] < self.Tab[smallest]:
             smallest = left
         if right < self.n and self.Tab[right] < self.Tab[smallest]:
             smallest = right
@@ -82,14 +83,14 @@ class Queue:
             self.downheap(smallest)
 
     def print_tree(self, idx, lvl):
-        if idx<self.size:           
+        if idx<self.n:           
             self.print_tree(self.right(idx), lvl+1)
-            print(2*lvl*'  ', self.tab[idx] if self.tab[idx] else None)           
+            print(2*lvl*'  ', self.Tab[idx] if self.Tab[idx] else None)           
             self.print_tree(self.left(idx), lvl+1)
 
     def print_tab(self):
         print ('{', end=' ')
-        print(*self.tab[:self.heap_size], sep=', ', end = ' ')
+        print(*self.Tab[:self.n], sep=', ', end = ' ')
         print( '}')
 
 def main():
@@ -97,17 +98,27 @@ def main():
     priority = [7,5,1,2,5,3,4,8,9]
     data = "GRYMOTYLA"
 
-    for p in priority:
-        for c in data:
-            heap.enqueue(Element(c,p))
-    
-    heap.print_tab()
-    heap.print_tree()
+    for i, p in enumerate(priority):
+        heap.enqueue(Element(dane=data[i],priorytet=p))
 
+    heap.print_tab()
+    print('\n')
+    heap.print_tree(0,0)
+    first_elem = heap.dequeue()
+    print('\n')
+    print(heap.peek())
+    print('\n')
+    heap.print_tab()
+    print('\n')
+    print(first_elem)
+    print('\n')
+    while not heap.is_empty():
+        elem = heap.dequeue()
+        print(elem)
+    print('\n')
+    heap.print_tab()
 
 main()
-
-
 
 #usuwając z kopca nie usuwać z tablicy, tablica może być większa od kopca
 #trzeba pamietać rozmiar kopca niezależnie od rozmiaru tablicy
