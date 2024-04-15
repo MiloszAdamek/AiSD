@@ -55,8 +55,9 @@ class Queue:
 
     def enqueue(self, elem: Element):
         self.Tab.append(elem)
-        self.upheap(self.n)
-        self.n += 1 #rozmiar kopca
+        self.n += 1
+        self.upheap(self.n - 1)
+         #rozmiar kopca
 
     def size(self):
         return len(self.Tab)
@@ -119,9 +120,3 @@ def main():
     heap.print_tab()
 
 main()
-
-#usuwając z kopca nie usuwać z tablicy, tablica może być większa od kopca
-#trzeba pamietać rozmiar kopca niezależnie od rozmiaru tablicy
-#przy wstawianiu nie wystarczy append/pop tylko trzeba porównywać 
-#jesli rozmiar tablicy == rozmiar kopca -> append
-#jesli nie to wykorzystujemy wolne miejsce
