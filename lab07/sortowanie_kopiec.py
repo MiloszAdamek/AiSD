@@ -108,13 +108,10 @@ class Queue:
         print(*self.Tab[:self.n], sep=', ', end = ' ')
         print( '}')
 
-def heapsort(data):
-    heap_data = [Element(value, key) for key,value in data]
+def heapsort(heap_data):
+    if isinstance(heap_data, tuple):
+        heap_data = [Element(value, key) for key,value in heap_data]
     heap = Queue(unsorted_data=heap_data)
-    heap.print_tree(0,0)
-    print('\n')
-    heap.print_tab()
-    print('\n')
 
     for i in range(heap.n):
         if heap.is_leaf(i) == False:
@@ -125,28 +122,71 @@ def heapsort(data):
     return heap.Tab
 
 def swap(data):
-    pass
+    n = len(data)
+    for i in range(n):
+        min_idx = i
+        for j in range(i+1, n):
+            if data[j] < data[min_idx]:
+                min_idx = j
+        data[i], data[min_idx] = data[min_idx], data[i]
+    return data
 
 def shift(data):
-    pass
+    n = len(data)
+    for i in range(n):
+        min_idx = data.index(min(data[i:]))
+        data.insert(i, data.pop(min_idx))
+    return data
 
-def time_test(metoda: str):
-    data = []
-    for i in range(10000):
-        data.append(int(random.random() * 100))
+def time_test():
+    data = [int(random.random() * 100) for _ in range(10000)]
+
     t_start = time.perf_counter()
-    if metoda == "heapsort":
-        heapsort(data)
-    elif metoda == "swap":
-        swap(data)
-    elif metoda == "shift":
-        shift(data)
+    heapsort(data.copy())
     t_stop = time.perf_counter()
-    print("Czas obliczeń:", "{:.7f}".format(t_stop - t_start))
+    print(f"\nHeapsort. Time:", "{:.7f}".format(t_stop - t_start))
+
+    t_start = time.perf_counter()
+    shift(data.copy())
+    t_stop = time.perf_counter()
+    print(f"\nShift. Time:", "{:.7f}".format(t_stop - t_start))
+
+    t_start = time.perf_counter()
+    swap(data.copy())
+    t_stop = time.perf_counter()
+    print(f"\nSwap. Time:", "{:.7f}".format(t_stop - t_start))
+
+
 
 def main():
     data = [(5,'A'), (5,'B'), (7,'C'), (2,'D'), (5,'E'), (1,'F'), (7,'G'), (5,'H'), (1,'I'), (2,'J')]
-    sorted_data = heapsort(data)
+    elements = [Element(value, key) for key, value in data]
+
+    # HEAPSORT
+    queue = Queue(unsorted_data=elements)
+    queue.print_tree(0, 0)
+    print('\n')
+    queue.print_tab()
+    print('\n')
+
+    sorted_data = []
+    while not queue.is_empty():
+        sorted_data.append(queue.dequeue())
+    print('\nHEAPSORT')
     print(sorted_data)
+
+    # SWAP
+    data_swap = elements.copy()
+    print('\nSWAP')
+    sorted_data = swap(data)
+    print(sorted_data)
+
+    # SHIFT
+    data_shift = elements.copy()
+    print('\nSHIFT')
+    sorted_data = shift(data)
+    print(sorted_data)
+
+    time_test()
 
 main()
