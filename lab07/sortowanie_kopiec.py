@@ -110,32 +110,32 @@ class Queue:
 
 def heapsort(heap_data):
     if isinstance(heap_data, tuple):
-        heap_data = [Element(value, key) for key,value in heap_data]
+        heap_data = [Element(value, key) for key, value in heap_data]
     heap = Queue(unsorted_data=heap_data)
 
-    for i in range(heap.n):
-        if heap.is_leaf(i) == False:
-            heap.downheap(i)
+    for i in range(heap.n -1, -1, -1):
+        heap.downheap(i)
             
+    sorted_data = []
     while not heap.is_empty():
-        heap.dequeue()
-    return heap.Tab
+        sorted_data.append(heap.dequeue())
+    return sorted_data
+
 
 def swap(data):
-    n = len(data)
-    for i in range(n):
-        min_idx = i
-        for j in range(i+1, n):
-            if data[j] < data[min_idx]:
-                min_idx = j
-        data[i], data[min_idx] = data[min_idx], data[i]
+    for i in range(len(data)):
+        temp = data[i]
+        j = i-1
+        while(j>=0 and data[j] > temp):
+            data[j+1] = data[j]
+            j -= 1
+        data[j+1] = temp
     return data
 
 def shift(data):
-    n = len(data)
-    for i in range(n):
-        min_idx = data.index(min(data[i:]))
-        data.insert(i, data.pop(min_idx))
+    for i in range(len(data)):
+        min_indeks = data.index(min(data[i:]))
+        data.insert(i, data.pop(min_indeks))
     return data
 
 def time_test():
@@ -178,13 +178,13 @@ def main():
     # SWAP
     data_swap = elements.copy()
     print('\nSWAP')
-    sorted_data = swap(data)
+    sorted_data = swap(data_swap)
     print(sorted_data)
 
     # SHIFT
     data_shift = elements.copy()
     print('\nSHIFT')
-    sorted_data = shift(data)
+    sorted_data = shift(data_shift)
     print(sorted_data)
 
     time_test()
