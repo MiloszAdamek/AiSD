@@ -8,6 +8,7 @@
 # None, bo za tydzien bedziemy coś wsadzać zamiast None - lista krotek, a w zasadzie slownik
 #klucz wierzchołek wartość none, a w przyszłości waga krawedzi
 import polska
+import turtle
 
 class Vertex:
     def __init__(self, key, edge=None) -> None:
@@ -16,6 +17,13 @@ class Vertex:
 
     def __hash__(self):
         return hash(self.key)
+
+    def __eq__(self, other):
+        return self.key == other.key
+    
+    def __str__(self):
+        return f"{self.key}"
+
     
 class AdjacencyList:
 
@@ -27,35 +35,38 @@ class AdjacencyList:
             self.vertex_dict[vertex] = {}
 
     def is_empty(self):
-        if self.vertex_dict is None:
-            return True
+        return not bool(self.vertex_dict)
 
     def insert_edge(self, vertex1: Vertex, vertex2: Vertex, edge=None):
         if vertex1 not in self.vertex_dict:
             self.insert_vertex(vertex1)
         if vertex2 not in self.vertex_dict:
-            self.insert_vertex(vertex1)
+            self.insert_vertex(vertex2)
 
         self.vertex_dict[vertex1][vertex2] = edge
 
     def delete_vertex(self, vertex: Vertex):
-    
-        self.vertex_dict[vertex] = None
-
-        for v in self.vertex_dict:
-            neighbours_list = self.neighbours(v)
-            if vertex in neighbours_list:
-                self.vertex_dict[v][vertex] = None
+        if vertex in self.vertex_dict:
+            del self.vertex_dict[vertex]
+            for v in self.vertex_dict:
+                if vertex in self.vertex_dict[v]:
+                    del self.vertex_dict[v][vertex]
 
     def delete_edge(self, vertex1: Vertex, vertex2: Vertex):
-        self.vertex_dict[vertex1][vertex2] = None
-        self.vertex_dict[vertex2][vertex1] = None
+        if vertex1 in self.vertex_dict and vertex2 in self.vertex_dict:
+            if vertex2 in self.vertex_dict[vertex1]:
+                del self.vertex_dict[vertex1][vertex2]
+            if vertex1 in self.vertex_dict[vertex2]:
+                del self.vertex_dict[vertex2][vertex1]
         
     def neighbours(self, vertex):
         return self.vertex_dict[vertex].items()
     
     def vertices(self):
         return self.vertex_dict.keys()
+    
+    def get_vertex(self, vertex_id):
+        return vertex_id
 
 class AdjacencyMatrix: 
     #indexy można wyszukiwać liniowo w liście wierzchołków
@@ -70,13 +81,13 @@ class AdjacencyMatrix:
     def insert_vertex(vertex: Vertex):
         pass
 
-    def insert_edge(verex1: Vertex, vertex2: Vertex, edge):
+    def insert_edge(vertex1: Vertex, vertex2: Vertex, edge):
         pass
 
     def delete_vertex(vertex):
         pass
 
-    def delete_edge(verex1: Vertex, vertex2: Vertex):
+    def delete_edge(vertex1: Vertex, vertex2: Vertex):
         pass
 
 def main():
@@ -85,34 +96,19 @@ def main():
                 Vertex('W'), Vertex('L'), Vertex('D'), Vertex('O'),
                 Vertex('S'), Vertex('T'), Vertex('K'), Vertex('R')]
     
-    edges = [('Z','G'), ('Z', 'P'), ('Z', 'F'),
-       ('G','Z'), ('G', 'P'), ('G', 'C'), ('G', 'N'),
-       ('N','G'), ('N', 'C'), ('N', 'W'), ('N', 'B'),
-       ('B','N'), ('B', 'W'), ('B', 'L'), 
-       ('F','Z'), ('F', 'P'), ('F', 'D'), 
-       ('P','F'), ('P', 'Z'), ('P', 'G'), ('P', 'C'), ('P','E'), ('P', 'O'), ('P', 'D'),        
-       ('C','P'), ('C', 'G'), ('C', 'N'), ('C', 'W'), ('C','E'),        
-       ('E','P'), ('E', 'C'), ('E', 'W'), ('E', 'T'), ('E','S'), ('E', 'O'),        
-       ('W','C'), ('W', 'N'), ('W', 'B'), ('W', 'L'), ('W','T'), ('W', 'E'),        
-       ('L','W'), ('L', 'B'), ('L', 'R'), ('L', 'T'),
-       ('D','F'), ('D', 'P'), ('D', 'O'), 
-       ('O','D'), ('O', 'P'), ('O', 'E'), ('O', 'S'),
-       ('S','O'), ('S', 'E'), ('S', 'T'), ('S', 'K'),
-       ('T','S'), ('T', 'E'), ('T', 'W'), ('T', 'L'), ('T','R'), ('T', 'K'),        
-       ('K','S'), ('K', 'T'), ('K', 'R'), 
-       ('R','K'), ('R', 'T'), ('R', 'L')]
-    
     graph_list = AdjacencyList()
 
     for vertex in vertices:
         graph_list.insert_vertex(vertex)
 
-    for edge in edges:
+    for edge in polska.graf:
         graph_list.insert_edge(Vertex(edge[0]), Vertex(edge[1]))
 
-    polska.draw_map(graph_list.vertex_dict)
+    graph_list.delete_vertex(Vertex('K'))
+    graph_list.delete_edge(Vertex('W'), Vertex('E'))
+    polska.draw_map(graph_list)
 
-    # graph_list.delete_vertex(Vertex('K'))
+
 
 main()
 

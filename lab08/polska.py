@@ -63,7 +63,7 @@ def draw_map(edges=graf, col=None):
     wn.setup(width=500,height=470, startx=10, starty=10)
     wn.title("Polska")
 
-    path = rf"C:\Users\Miloush\Documents\AGH\SEM4\Algorytmy_i_struktury_danych\AiSD\lab08\polska.gif"
+    path = rf"E:\AGH\IV SEM\Algorytmy i Struktury Danych\AiSD\lab08\polska.gif"
     wn.addshape(path) 
     
     myImage = turtle.Turtle()
