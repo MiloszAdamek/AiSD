@@ -1,12 +1,3 @@
-#lista sasiedztwa na słownikach - najpierw
-#macierz sasiedztwa na tablicy tablic
-
-#graf to słownik wierzchołków, gdzie w slowniku każdemu wierzchołkowi jest przypisany słownik jego sąsaidów
-
-#Trzy klasy: 1. wierzchołek (3 metody + dane) 2. graf lista sasiedztwa 3. graf macierz sasiedztwa
-# 4. klasa krawedz - dziś nie potrzebna. W liscie sasiedztwa krotka - sąsiad to jest krotka wierzchołek + informacja o krawędzi łączącej
-# None, bo za tydzien bedziemy coś wsadzać zamiast None - lista krotek, a w zasadzie slownik
-#klucz wierzchołek wartość none, a w przyszłości waga krawedzi
 import polska
 import turtle
 
@@ -144,6 +135,6 @@ def main():
     graph_matrix.delete_vertex(Vertex('K'))
     graph_matrix.delete_edge(Vertex('W'), Vertex('E'))
     polska.draw_map(graph_matrix)
-    
+
 main()
 
