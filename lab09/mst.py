@@ -1,4 +1,3 @@
-import turtle
 import numpy as np
 import graf_mst
 
@@ -11,9 +10,6 @@ class Vertex:
         self.key = key
         self.edge = edge
         self.colour = colour
-        self.intree = 0
-        self.distance = np.float64('inf')
-        self.parent = None
 
     def __hash__(self):
         return hash(self.key)
@@ -28,10 +24,17 @@ class AdjacencyList:
 
     def __init__(self):
         self.vertex_dict = {}
+        self.intree = {}
+        self.distance = {}
+        self.parent = {}
 
     def insert_vertex(self, vertex: Vertex):
         if vertex not in self.vertex_dict:
             self.vertex_dict[vertex] = {}
+
+        self.intree[vertex] = 0
+        self.distance[vertex] = np.inf
+        self.parent[vertex] = None
 
     def is_empty(self):
         return not bool(self.vertex_dict)
@@ -76,35 +79,41 @@ def printGraph(g):
         print()
     print("-------------------")
 
-def Prim_MST(g: AdjacencyList):
-    T_prim = AdjacencyList()
+
+def Prim_MST(graph: AdjacencyList):
+    MST = AdjacencyList()  # pusty graf
     sum = 0
-    vertex = list(g.vertices())[0]
-    T_prim.insert_vertex(vertex)
 
-    while vertex.intree == 0:
+    curr_vertex = list(graph.vertices())[0]
 
-        vertex.intree = 1
-        for neighbour, w in g.neighbours(vertex):
-            print(neighbour.edge, neighbour.distance)
-            if neighbour.edge < neighbour.distance and neighbour.intree == 0:
-                neighbour.distance = neighbour.edge
-                vertex = neighbour.parent
+    while graph.intree[curr_vertex] == 0:
+
+        MST.insert_vertex(curr_vertex)
+        graph.intree[curr_vertex] = 1
         
-        distance_list = []
-        for v in list(T_prim.vertices()):
-            if v.intree == 0:
-                distance_list.append[v.distance]
+        min_distance = np.inf
+        min_vertex = None
 
-        min_dst = min(distance_list)
+        # Szukanie najbliższego wierzchołka spoza drzewa MST
+        for v in graph.vertices():
+            if graph.intree[v] == 1:
+                for neighbour, weight in graph.neighbours(v):
+                    if graph.intree[neighbour] == 0 and weight < min_distance:
+                        min_distance = weight
+                        min_vertex = neighbour
+                        parent_vertex = v  # Zapiszmy rodzica dla późniejszego dodania krawędzi
+
+        if min_vertex is None: 
+            break
+
+        # Dodajemy wierzchołek do drzewa MST
+        curr_vertex = min_vertex
         
-        for v in list(T_prim.vertices()):
-            if v.distance == min_dst:
-                T_prim.insert_edge(v, v.parent, min_dst)
-                sum += min_dst
-                break
+        MST.insert_edge(min_vertex, parent_vertex, min_distance)
+        MST.insert_edge(parent_vertex, min_vertex, min_distance)
+        sum += min_distance
 
-    return T_prim, sum
+    return MST, sum
 
 def main():
     
@@ -112,8 +121,10 @@ def main():
 
     for elem in graf_mst.graf:
         x1, x2, weight = elem
+
         v1 = Vertex(x1)
         v2 = Vertex(x2)
+
         input_graph.insert_vertex(v1)
         input_graph.insert_vertex(v2)
         input_graph.insert_edge(v1, v2, weight)
