@@ -1,9 +1,6 @@
 import numpy as np
 import graf_mst
 
-# dla kazdego wezla sprawdzać sąsiadów i poprawić sąsiadom odległosci do jego najblizszego sąsiada
-# krawędź = odlgegłość
-
 class Vertex:
 
     def __init__(self, key, edge=None, colour=None) -> None:
@@ -79,44 +76,8 @@ def printGraph(g):
         print()
     print("-------------------")
 
-
-# def Prim_MST(graph: AdjacencyList):
-#     MST = AdjacencyList()  # pusty graf
-#     sum = 0
-
-#     curr_vertex = list(graph.vertices())[0]
-
-#     while graph.intree[curr_vertex] == 0:
-
-#         MST.insert_vertex(curr_vertex)
-#         graph.intree[curr_vertex] = 1
-        
-#         min_distance = np.inf
-#         min_vertex = None
-
-#         # Szukanie najbliższego wierzchołka spoza drzewa MST
-#         for v in graph.vertices():
-#                 for neighbour, weight in graph.neighbours(v):
-#                     if graph.intree[neighbour] == 0 and weight < min_distance:
-#                         min_distance = weight
-#                         min_vertex = neighbour
-#                         parent_vertex = v  # Zapiszmy rodzica dla późniejszego dodania krawędzi
-
-#         if min_vertex is None: 
-#             break
-
-#         # Dodajemy wierzchołek do drzewa MST
-#         curr_vertex = min_vertex
-        
-#         MST.insert_edge(min_vertex, parent_vertex, min_distance)
-#         MST.insert_edge(parent_vertex, min_vertex, min_distance)
-#         sum += min_distance
-
-#     return MST, sum
-
-
 def Prim_MST(graph: AdjacencyList):
-    MST = AdjacencyList()  # pusty graf
+    MST = AdjacencyList()
     sum = 0
 
     curr_vertex = list(graph.vertices())[0]
@@ -129,7 +90,7 @@ def Prim_MST(graph: AdjacencyList):
         for neighbour, weight in graph.neighbours(curr_vertex):
             if graph.intree[neighbour] == 0 and weight < graph.distance[neighbour]:
                 graph.distance[neighbour] = weight
-                graph.parent[neighbour] = curr_vertex  # Zapiszmy rodzica dla późniejszego dodania krawędzi
+                graph.parent[neighbour] = curr_vertex
 
         min_dst = np.inf
         next_vertex = None
