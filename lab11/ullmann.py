@@ -112,7 +112,7 @@ class AdjacencyMatrix:
                 self[current_row][c] = 1
                 self.ullmann(used, current_row+1)
                 used.remove(c)
-
+    
 def printGraph(g):
     print("------GRAPH------")
     for v in g.vertices():
