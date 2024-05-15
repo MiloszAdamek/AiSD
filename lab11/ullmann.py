@@ -66,10 +66,9 @@ class AdjacencyMatrix:
     
     def __mul__(self, other):
         result = AdjacencyMatrix()
-        
-        self_rows = self.size[0]
-        self_cols = self.size[1]
-        other_cols = self.size[1]
+        self_rows = self.size()[0]
+        self_cols = self.size()[1]
+        other_cols = self.size()[1]
         result.matrix = [[0 for _ in range(self_rows)] for _ in range(self_cols)]
         
         if self_rows == other_cols:
@@ -100,9 +99,12 @@ class AdjacencyMatrix:
         cols = len(self.matrix[0])
         return rows,cols
     
-    def ullmann(self, used, current_row=0):
+    def ullmann(self, used, P_Graph, G_graph, current_row=0, izomorfizmy = []):
         if current_row == self.size()[0]:
-            print(self.matrix)
+            temp = AdjacencyMatrix()
+            temp = self * G_graph
+            if self * temp.transpose() == P_Graph.matrix:
+                izomorfizmy.append(self)
             return
         for c in range(self.size()[1]):
             if c not in used:
@@ -110,7 +112,7 @@ class AdjacencyMatrix:
                 for i in range(self.size()[1]):
                     self[current_row][i] = 0
                 self[current_row][c] = 1
-                self.ullmann(used, current_row+1)
+                self.ullmann(used, G_graph, P_Graph, current_row+1, izomorfizmy)
                 used.remove(c)
     
 def printGraph(g):
@@ -121,7 +123,7 @@ def printGraph(g):
             print(n, w, end=";")
         print()
     print("-------------------")
-    
+
 def main():
 
     graph_G = [('A','B',1), ('B','F',1), ('B','C',1), ('C','D',1), ('C','E',1), ('D','E',1)]
@@ -146,17 +148,13 @@ def main():
         g_P.insert_vertex(v2)
         g_P.insert_edge(v1, v2, weight)
 
-    print(g_P.matrix)
-    print(g_G.matrix)
-
     M = AdjacencyMatrix()
     for i in range(len(g_P.matrix)):
         M.matrix.append([])
         current_row = M.matrix[i]
         for j in range(len(g_G.matrix[0])):
             current_row.append(0)
-    print(M.matrix)
     used = set([])
-    M.ullmann(used=used)
+    M.ullmann(used=used, G_graph=g_G, P_Graph=g_P)
 
 main()
