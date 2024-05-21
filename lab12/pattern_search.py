@@ -77,10 +77,9 @@ def rabin_karp_rolling_hash(S, W):
 
     for i in range(N-1):  # N - jak wyżej - długość wzorca
         h = (h*d) % q 
-
+        
     m = 0
     hS = hash(S[m:m+N])
-    
     for m in range(M-N+1):
         if hS == hW:
             pass_num += 1
