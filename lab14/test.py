@@ -102,3 +102,9 @@ for point in p2:
     points2.append(Point(point[0], point[1]))
 print(convex_hull(points))
 print(convex_hull_v2(points))
+
+print(convex_hull(points1))
+print(convex_hull_v2(points1))
+
+print(convex_hull(points2))
+print(convex_hull_v2(points2))
